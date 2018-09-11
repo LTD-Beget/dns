@@ -1,0 +1,66 @@
+syntax = 'proto3';
+
+package beget.dns.v1.dns;
+
+import "google/api/annotations.proto";
+import "dns/proto/v1/structures.proto";
+
+service DnsService {
+    rpc setPtrRecord (SetPtrRecordRequest) returns (SetPtrRecordResponse) {
+        option (google.api.http) = {
+            post: "/v1/dns/ptr/set"
+            body: "*"
+        };
+    }
+
+    rpc unsetPtrRecord (UnsetPtrRecordRequest) returns (UnsetPtrRecordResponse) {
+        option (google.api.http) = {
+            post: "/v1/dns/ptr/unset"
+            body: "*"
+        };
+    }
+}
+
+message SetPtrRecordRequest {
+    string ip = 1; //IP for PTR
+    string fqdn = 2; //FQDN for PTRD
+}
+
+message SetPtrRecordResponse {
+    oneof result {
+        bool success = 1;
+        SetPtrRecordError error = 2;
+    }
+
+    message SetPtrRecordError {
+        Code code = 1;
+        string message = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_FQDN = 1; //Домен указан не верно, не существует, или не принадлежит пользователю
+            INVALID_IP = 2; //IP указан не верно или не принадлежит пользователю
+        }
+    }
+}
+
+message UnsetPtrRecordRequest {
+    string ip = 1; //IP адрес, на который смотрит PTR запись
+}
+
+message UnsetPtrRecordResponse {
+    oneof result {
+        bool success = 1;
+        UnsetPtrRecordError error = 2;
+    }
+
+    message UnsetPtrRecordError {
+        Code code = 1;
+        string message = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_IP = 1; //IP указан не верно или не принадлежит пользователю
+        }
+    }
+}
