@@ -3,27 +3,40 @@ syntax = 'proto3';
 package beget.dns.v1.dns;
 
 import "google/api/annotations.proto";
-import "dns/proto/v1/structures.proto";
 
 service DnsService {
+    rpc getPtrRecord (GetPtrRecordRequest) returns (GetPtrRecordResponse) {
+        option (google.api.http) = {
+            get: "/v1/dns/{host}/ptr"
+            body: "*"
+        };
+    }
+
     rpc setPtrRecord (SetPtrRecordRequest) returns (SetPtrRecordResponse) {
         option (google.api.http) = {
-            post: "/v1/dns/ptr/set"
+            post: "/v1/dns/{host}/ptr"
             body: "*"
         };
     }
 
     rpc unsetPtrRecord (UnsetPtrRecordRequest) returns (UnsetPtrRecordResponse) {
         option (google.api.http) = {
-            post: "/v1/dns/ptr/unset"
-            body: "*"
+            delete: "/v1/dns/{host}/ptr"
         };
     }
 }
 
+message GetPtrRecordRequest {
+    string host = 1; //FQDN
+}
+
+message GetPtrRecordResponse {
+    string ptr_record = 1;
+}
+
 message SetPtrRecordRequest {
-    string ip = 1; //IP for PTR
-    string fqdn = 2; //FQDN for PTRD
+    string ip = 1; //IP
+    string host = 2; //FQDN
 }
 
 message SetPtrRecordResponse {
@@ -45,7 +58,7 @@ message SetPtrRecordResponse {
 }
 
 message UnsetPtrRecordRequest {
-    string ip = 1; //IP адрес, на который смотрит PTR запись
+    string host = 1; //IP адрес, на который смотрит PTR запись
 }
 
 message UnsetPtrRecordResponse {
