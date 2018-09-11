@@ -7,21 +7,20 @@ import "google/api/annotations.proto";
 service DnsService {
     rpc getPtrRecord (GetPtrRecordRequest) returns (GetPtrRecordResponse) {
         option (google.api.http) = {
-            get: "/v1/dns/{host}/ptr"
-            body: "*"
+            get: "/v1/dns/{ip}/ptr"
         };
     }
 
     rpc setPtrRecord (SetPtrRecordRequest) returns (SetPtrRecordResponse) {
         option (google.api.http) = {
-            post: "/v1/dns/{host}/ptr"
+            post: "/v1/dns/{ip}/ptr"
             body: "*"
         };
     }
 
     rpc unsetPtrRecord (UnsetPtrRecordRequest) returns (UnsetPtrRecordResponse) {
         option (google.api.http) = {
-            delete: "/v1/dns/{host}/ptr"
+            delete: "/v1/dns/{ip}/ptr"
         };
     }
 }
@@ -41,7 +40,7 @@ message SetPtrRecordRequest {
 
 message SetPtrRecordResponse {
     oneof result {
-        bool success = 1;
+        string ptr_record = 1;
         SetPtrRecordError error = 2;
     }
 
