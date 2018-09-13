@@ -26,7 +26,7 @@ service DnsService {
 }
 
 message GetPtrRecordRequest {
-    string host = 1; //FQDN
+    string ip = 1; //IP
 }
 
 message GetPtrRecordResponse {
@@ -57,7 +57,7 @@ message SetPtrRecordResponse {
 }
 
 message UnsetPtrRecordRequest {
-    string host = 1; //IP адрес, на который смотрит PTR запись
+    string ip = 1; //IP адрес, на который смотрит PTR запись
 }
 
 message UnsetPtrRecordResponse {
